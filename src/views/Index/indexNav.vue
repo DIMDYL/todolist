@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-const defaultactive = ref(location.pathname)
+const defaultactive = ref(location.hash.substring(1))
 </script>
 <template>
   <div class="nav BoxColor">

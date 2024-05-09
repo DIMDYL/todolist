@@ -25,7 +25,7 @@ const router = createRouter({
     }
   ]
 })
-router.afterEach((to, next) => {
+router.afterEach((to) => {
   // 获取目标路由的meta中的title信息 进行拼接，修改 页面title
   document.title = `${to.meta.title || ''} - Me And GEM `
   const contentContainer = document.querySelector('.main')
@@ -35,12 +35,5 @@ router.afterEach((to, next) => {
     // 如果没有找到特定容器，则尝试滚动整个窗口
     window.scrollTo(0, 0)
   }
-  if (to.matched.length === 0) {
-    // 重定向到默认路由
-    next('/')
-  } else {
-    next()
-  }
-  next()
 })
 export default router
