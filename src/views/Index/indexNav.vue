@@ -1,0 +1,60 @@
+<script setup>
+import { ref } from 'vue'
+const defaultactive = ref(location.pathname)
+</script>
+<template>
+  <div class="nav BoxColor">
+    <div class="top animate__animated animate__bounce animate__rubberBand">
+      <h5>me</h5>
+      <h4>And</h4>
+      <h2>GEM</h2>
+    </div>
+    <el-menu
+      router
+      active-text-color="#ffd04b"
+      background-color="#252527"
+      class="el-menu-vertical-demo animate__animated animate__bounce animate__rubberBand"
+      :default-active="defaultactive"
+      text-color="#fff"
+    >
+      <el-menu-item index="/">
+        <el-icon color="#409efc" class="no-inherit">
+          <Share />
+        </el-icon>
+        <span>首页</span>
+      </el-menu-item>
+      <!-- <el-menu-item index="/meandgem">
+        <el-icon color="#409efc" class="no-inherit">
+          <Share />
+        </el-icon>
+        <span>我们的故事</span>
+      </el-menu-item> -->
+      <el-menu-item index="/user">
+        <el-icon color="#409efc" class="no-inherit">
+          <Share />
+        </el-icon>
+        <span>用户中心</span>
+      </el-menu-item>
+    </el-menu>
+  </div>
+</template>
+<style lang="less" scoped>
+.nav {
+  width: 200px;
+  height: 100%;
+  overflow: hidden;
+  .top {
+    width: 100%;
+    height: 177px;
+    color: #ffd04b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.el-menu {
+  border-right: none !important;
+}
+</style>
