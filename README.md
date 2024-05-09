@@ -1,6 +1,23 @@
-# meandvue2.0
+ # MyToDoList
 
-This template should help get you started developing with Vue 3 in Vite.
+## http://mytodolist.cn/
+
+## 技术：
+
+前端：
+
+1. vue3
+2. element_plus
+3. axios
+
+后端：
+
+1. Springboot
+2. maven
+3. mybatis
+4. lomback
+5. PageHelper
+6. mysql
 
 ## Recommended IDE Setup
 
