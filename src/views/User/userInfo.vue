@@ -2,23 +2,23 @@
 <template>
   <div class="userinfo BoxColor">
     <div class="background">
-      <div class="avatar">
+      <div class="avatar animate__animated animate__jackInTheBox">
         <el-avatar
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         />
       </div>
-      <div class="info animate__animated animate__flipInY">
+      <div class="info animate__animated animate__jackInTheBox">
         <h1>DDD</h1>
         <h5>DDD@DDD.DDD</h5>
       </div>
     </div>
     <div class="information">
       <ul>
-        <li class="info animate__animated animate__flipInY">
+        <li class="info animate__animated animate__jackInTheBox">
           <p>加入时间</p>
           <h4>1991-08-16</h4>
         </li>
-        <li class="info animate__animated animate__flipInY">
+        <li class="info animate__animated animate__jackInTheBox">
           <p>我们的故事</p>
           <h4>30 篇</h4>
         </li>
@@ -28,7 +28,6 @@
 </template>
 <style lang="less" scoped>
 .userinfo {
-  height: 377px;
   display: flex;
   flex-direction: column;
   .background {

@@ -2,7 +2,7 @@
 <template>
   <div class="contenttop">
     <h1 class="animate__animated animate__bounce animate__rubberBand">
-      MeAndGEM
+      My ToDo List
     </h1>
   </div>
 </template>

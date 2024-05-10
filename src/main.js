@@ -2,6 +2,7 @@
 import '@/style/init.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import '@/assets/ali/iconfont.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'animate.css'

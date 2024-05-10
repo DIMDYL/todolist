@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 const defaultactive = ref(location.hash.substring(1))
-console.log()
 </script>
 <template>
   <div class="nav BoxColor">
@@ -19,21 +18,17 @@ console.log()
       text-color="#fff"
     >
       <el-menu-item index="/">
-        <el-icon color="#409efc" class="no-inherit">
-          <Share />
-        </el-icon>
-        <span>首页</span>
+        <el-icon color="#409efc" class="iconfont"> &#xe66c; </el-icon>
+        <span>每日总结</span>
       </el-menu-item>
-      <!-- <el-menu-item index="/meandgem">
-        <el-icon color="#409efc" class="no-inherit">
-          <Share />
-        </el-icon>
-        <span>我们的故事</span>
-      </el-menu-item> -->
+      <el-menu-item index="/">
+        <el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon>
+
+        <span>我的代办</span>
+      </el-menu-item>
       <el-menu-item index="/user">
-        <el-icon color="#409efc" class="no-inherit">
-          <Share />
-        </el-icon>
+        <el-icon color="#409efc" class="iconfont">&#xe61d; </el-icon>
+
         <span>用户中心</span>
       </el-menu-item>
     </el-menu>

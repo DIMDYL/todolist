@@ -37,11 +37,9 @@ const data = ref([
     showOperation: false
   }
 ])
-const up = (val) => {
-  console.log(val)
-}
 </script>
 <template>
+  <h2 class="title">已完成任务：</h2>
   <el-timeline>
     <el-timeline-item
       v-for="item in data"
@@ -52,13 +50,13 @@ const up = (val) => {
       <el-card>
         <div class="card">
           {{ item.content }}
-          <div
+          <!-- <div
             class="operation animate__animated animate__bounce animate__flipInY"
           >
             <a @click.stop="up(1)">编辑</a>
             <a @click.stop="up(2)">删除</a>
             <a @click.stop="up(3)">查看</a>
-          </div>
+          </div> -->
         </div>
       </el-card>
     </el-timeline-item>
