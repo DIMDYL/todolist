@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import index from '@/views/Index/index.vue'
 import User from '@/views/User/index.vue'
 import Article from '@/views/Article/index.vue'
-import ToDoList from '@/views/ToDoList/index.vue'
+import ToDoList_Limit from '@/views/ToDoList/Limit/index.vue'
+import ToDoList_Common from '@/views/ToDoList/Common/index.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -27,13 +29,19 @@ const router = createRouter({
           meta: { title: '登录' }
         },
         {
-          name: 'toDoList',
-          path: '/toDoList/:type',
-          component: ToDoList,
-          meta: { title: '待办事项' },
-          props: ({ params: { type } }) => {
-            return { type }
-          }
+          path: '/todolist',
+          children: [
+            {
+              path: 'limit',
+              component: ToDoList_Limit,
+              meta: { title: '定时任务' }
+            },
+            {
+              path: 'common',
+              component: ToDoList_Common,
+              meta: { title: '普通任务' }
+            }
+          ]
         }
       ]
     }
