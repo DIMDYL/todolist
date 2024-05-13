@@ -38,7 +38,12 @@ a {
     text-decoration: none;
     color: inherit;
 }
- 
+button:hover{
+    cursor: pointer;
+}
 input, button, textarea, select {
     font: inherit;
+}
+input, button, textarea, select:focus {
+    outline:none;
 }

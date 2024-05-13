@@ -1,7 +1,22 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 const defaultactive = ref(location.pathname)
+const router = useRouter()
+
+let elMenuActive = ref('')
+
+let skipToDoList = (type) => {
+  router.push({
+    name: 'toDoList',
+    params: {
+      type
+    }
+  })
+  elMenuActive.value = '/toDoList/' + type
+}
 </script>
+
 <template>
   <div class="nav BoxColor">
     <div class="top animate__animated animate__bounce animate__rubberBand">
@@ -10,22 +25,32 @@ const defaultactive = ref(location.pathname)
       <h1>List</h1>
     </div>
     <el-menu
+      :default-active="elMenuActive"
       router
       active-text-color="#ffd04b"
       background-color="#252527"
       class="el-menu-vertical-demo animate__animated animate__bounce animate__rubberBand"
-      :default-active="defaultactive"
       text-color="#fff"
     >
       <el-menu-item index="/">
         <el-icon color="#409efc" class="iconfont"> &#xe66c; </el-icon>
         <span>每日总结</span>
       </el-menu-item>
-      <el-menu-item index="/">
-        <el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon>
+      <el-sub-menu index="1">
+        <template #title>
+          <el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon>
+          <span>我的代办</span>
+        </template>
+        <el-menu-item index="/toDoList/1" @click="skipToDoList(1)"
+          ><el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon
+          >定时任务</el-menu-item
+        >
+        <el-menu-item index="/toDoList/2" @click="skipToDoList(2)"
+          ><el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon
+          >普通任务</el-menu-item
+        >
+      </el-sub-menu>
 
-        <span>我的代办</span>
-      </el-menu-item>
       <el-menu-item index="/user">
         <el-icon color="#409efc" class="iconfont">&#xe61d; </el-icon>
         <span>用户中心</span>
