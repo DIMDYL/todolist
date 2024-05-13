@@ -29,6 +29,11 @@ const router = createRouter({
           props: ({ params: { type } }) => {
             return { type }
           }
+        },
+        {
+          path: '/login',
+          component: () => import('@/views/Loginregistration/index.vue'),
+          meta: { title: '登录' }
         }
       ]
     }
@@ -36,7 +41,7 @@ const router = createRouter({
 })
 router.afterEach((to) => {
   // 获取目标路由的meta中的title信息 进行拼接，修改 页面title
-  document.title = `${to.meta.title || ''} - Me And GEM `
+  document.title = `${to.meta.title || ''} - My Todo List `
   const contentContainer = document.querySelector('.main')
   if (contentContainer) {
     contentContainer.scrollTop = 0
