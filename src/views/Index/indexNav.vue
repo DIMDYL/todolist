@@ -1,21 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 const defaultactive = ref(location.pathname)
-const router = useRouter()
-
-//动态路由跳转方法
-let skipToDoList = (type) => {
-  // ①更新defaultactive的值为 /toDoList/type.
-  defaultactive.value = '/toDoList/' + type
-  // ②路由跳转
-  router.push({
-    name: 'toDoList',
-    params: {
-      type
-    }
-  })
-}
 </script>
 
 <template>
@@ -42,11 +27,11 @@ let skipToDoList = (type) => {
           <el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon>
           <span>我的代办</span>
         </template>
-        <el-menu-item index="/toDoList/1" @click="skipToDoList(1)"
+        <el-menu-item index="/toDoList/limit"
           ><el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon
           >定时任务</el-menu-item
         >
-        <el-menu-item index="/toDoList/2" @click="skipToDoList(2)"
+        <el-menu-item index="/toDoList/common"
           ><el-icon color="#409efc" class="iconfont"> &#xe601; </el-icon
           >普通任务</el-menu-item
         >
