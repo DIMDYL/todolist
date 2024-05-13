@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import ContentUserinfo from './ContentUserinfo.vue'
+import ContentPleaselogin from './ContentPleaselogin.vue'
+import { useUserInfoStore } from '@/stores/userinfo.js'
+const useUserInfo = useUserInfoStore()
 import { useLayoutStore } from '@/stores/layout.js'
 const layoutStore = useLayoutStore()
 const y = ref(layoutStore.y)
@@ -8,7 +11,8 @@ const y = ref(layoutStore.y)
 <template>
   <div class="contentright" :class="{ top: y > 200 }">
     <div class="contentbox BoxColor">
-      <ContentUserinfo />
+      <ContentUserinfo v-if="useUserInfo.loginstatus === true" />
+      <ContentPleaselogin v-if="useUserInfo.loginstatus === false" />
     </div>
   </div>
 </template>
