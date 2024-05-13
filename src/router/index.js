@@ -22,11 +22,11 @@ const router = createRouter({
           meta: { title: '首页' }
         },
         {
-<<<<<<< HEAD
           path: '/login',
           component: () => import('@/views/Loginregistration/index.vue'),
           meta: { title: '登录' }
-=======
+        },
+        {
           name: 'toDoList',
           path: '/toDoList/:type',
           component: ToDoList,
@@ -34,7 +34,6 @@ const router = createRouter({
           props: ({ params: { type } }) => {
             return { type }
           }
->>>>>>> origin/lisiyun
         }
       ]
     }
