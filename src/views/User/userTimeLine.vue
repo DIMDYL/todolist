@@ -39,7 +39,6 @@ const data = ref([
 ])
 </script>
 <template>
-  <h2 class="title">已完成任务：</h2>
   <el-timeline>
     <el-timeline-item
       v-for="item in data"

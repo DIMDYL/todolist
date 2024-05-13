@@ -4,10 +4,11 @@ import { useRouter } from 'vue-router'
 const defaultactive = ref(location.pathname)
 console.log(defaultactive)
 const router = useRouter()
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
-}
+//动态路由跳转方法
 let skipToDoList = (type) => {
+  // ①更新defaultactive的值为 /toDoList/type.
+  defaultactive.value = '/toDoList/' + type
+  // ②路由跳转
   router.push({
     name: 'toDoList',
     params: {
@@ -30,7 +31,6 @@ let skipToDoList = (type) => {
       active-text-color="#ffd04b"
       background-color="#252527"
       class="el-menu-vertical-demo animate__animated animate__bounce animate__rubberBand"
-      @open="handleOpen"
       text-color="#fff"
     >
       <el-menu-item index="/">
