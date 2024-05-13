@@ -1,14 +1,13 @@
 <script setup>
-import ContentArticle from './ContentArticle.vue'
 import ContentRight from './ContentRight.vue'
 </script>
 <template>
   <div class="panel">
     <div class="article">
-      <ContentArticle />
+      <slot></slot>
     </div>
     <div class="contentright">
-      <ContentRight />
+      <ContentRight></ContentRight>
     </div>
   </div>
 </template>

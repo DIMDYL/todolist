@@ -5,7 +5,9 @@ import ContentPanel from './ContentPanel.vue'
 <template>
   <div class="article animate__animated animate__fadeIn">
     <ContentTop></ContentTop>
-    <ContentPanel></ContentPanel>
+    <ContentPanel>
+      <slot></slot>
+    </ContentPanel>
   </div>
 </template>
 <style lang="less" scoped>
