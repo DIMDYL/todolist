@@ -9,6 +9,8 @@
 1. vue3
 2. element_plus
 3. axios
+4. pinia
+5. vueuse库
 
 后端：
 
