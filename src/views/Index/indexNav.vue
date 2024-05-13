@@ -2,10 +2,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 const defaultactive = ref(location.pathname)
+console.log(defaultactive)
 const router = useRouter()
-
-let elMenuActive = ref('')
-
+const handleOpen = (key, keyPath) => {
+  console.log(key, keyPath)
+}
 let skipToDoList = (type) => {
   router.push({
     name: 'toDoList',
@@ -13,7 +14,6 @@ let skipToDoList = (type) => {
       type
     }
   })
-  elMenuActive.value = '/toDoList/' + type
 }
 </script>
 
@@ -25,11 +25,12 @@ let skipToDoList = (type) => {
       <h1>List</h1>
     </div>
     <el-menu
-      :default-active="elMenuActive"
+      :default-active="defaultactive"
       router
       active-text-color="#ffd04b"
       background-color="#252527"
       class="el-menu-vertical-demo animate__animated animate__bounce animate__rubberBand"
+      @open="handleOpen"
       text-color="#fff"
     >
       <el-menu-item index="/">
