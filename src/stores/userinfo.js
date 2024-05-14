@@ -14,6 +14,7 @@ export const useUserInfoStore = defineStore(
       age: 18,
       sex: '男'
     })
+
     // 更新用户信息
     function updateinfo(val) {
       user.value = val
@@ -26,6 +27,7 @@ export const useUserInfoStore = defineStore(
     function updateLoginStatus(val) {
       loginstatus.value = val
     }
+
     return {
       user,
       updateinfo,
