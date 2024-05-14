@@ -1,5 +1,9 @@
 <script setup>
 import userTimeLine from './userTimeLine.vue'
+import { userStore } from '@/stores/userStore.js'
+import { storeToRefs } from 'pinia'
+let userStore_ = userStore()
+let { isEdit } = storeToRefs(userStore_)
 </script>
 <template>
   <div class="panel">
@@ -9,7 +13,11 @@ import userTimeLine from './userTimeLine.vue'
         <h5>DDD@DDD.DDD</h5>
         <p>加入时间</p>
         <h4>1991-08-16</h4>
-        <el-button type="info">编辑</el-button>
+        <el-button
+          type="info"
+          @click="userStore_.changeStatusForEdit(!isEdit.value)"
+          >编辑</el-button
+        >
       </div>
     </div>
     <div class="timeline BoxColor">
