@@ -1,5 +1,32 @@
+<script setup>
+import { reactive, ref } from 'vue'
+
+const formLabelAlign = reactive({
+  name: '',
+  region: '',
+  type: ''
+})
+const labelPosition = ref('Top')
+</script>
 <template>
-  <div class="login">1</div>
+  <div class="login">
+    <el-form
+      :label-position="labelPosition"
+      label-width="auto"
+      :model="formLabelAlign"
+      style="max-width: 600px"
+    >
+      <el-form-item label="用户名">
+        <el-input v-model="formLabelAlign.name" />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="formLabelAlign.region" />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="formLabelAlign.region" />
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <style lang="less" scoped>
 .login {

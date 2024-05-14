@@ -2,7 +2,9 @@
 <template>
   <div class="pleaselogin">
     <p>未登录</p>
-    <el-button type="warning">去登录</el-button>
+    <a href="/login">
+      <el-button type="warning">去登录</el-button>
+    </a>
   </div>
 </template>
 <style lang="less" scoped>

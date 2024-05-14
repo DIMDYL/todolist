@@ -1,14 +1,28 @@
 <script setup>
 import { useUserInfoStore } from '@/stores/userinfo.js'
+import { useLayoutStore } from '@/stores/layout.js'
+
 import loginComponents from './loginComponents.vue'
 import registerComponents from './registerComponents.vue'
 const useUserInfo = useUserInfoStore()
 if (useUserInfo.componentsname === null) {
   useUserInfo.updatecomponentsname(loginComponents)
 }
+console.log(useUserInfo.user)
+
 const UpdateComponentsName = (val) => {
   useUserInfo.updatecomponentsname(val)
   console.log(useUserInfo.componentsname)
+  useUserInfo.updateinfo({
+    name: 'dimdi111m',
+    age: 18,
+    sex: '男'
+  })
+  console.log(useUserInfo.user)
+}
+const useLayout = useLayoutStore()
+const update = () => {
+  useLayout.updatecount('DDD')
 }
 </script>
 <template>
@@ -65,6 +79,8 @@ const UpdateComponentsName = (val) => {
     width: 100%;
     height: 100%;
     display: flex;
+    padding: 20px;
+    box-sizing: border-box;
     justify-content: center;
     align-items: center;
     .Loginregistrationbox {
@@ -75,9 +91,11 @@ const UpdateComponentsName = (val) => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-bottom: 20px;
       }
       .bottom {
         width: 100%;
+        margin-top: 20px;
         display: flex;
         justify-content: space-between;
         a {
@@ -90,5 +108,8 @@ const UpdateComponentsName = (val) => {
       }
     }
   }
+}
+/deep/ .el-form-item__label {
+  color: white !important;
 }
 </style>

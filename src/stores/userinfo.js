@@ -22,7 +22,7 @@ export const useUserInfoStore = defineStore(
     function updatecomponentsname(val) {
       componentsname.value = val
     }
-    //
+    // 更新登录状态
     function updateLoginStatus(val) {
       loginstatus.value = val
     }
@@ -36,6 +36,9 @@ export const useUserInfoStore = defineStore(
     }
   },
   {
-    persist: true
+    persist: {
+      key: 'userinfo',
+      paths: ['user', 'loginstatus']
+    }
   }
 )

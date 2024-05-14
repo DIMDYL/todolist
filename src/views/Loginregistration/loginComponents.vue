@@ -16,14 +16,11 @@ const labelPosition = ref('Top')
       :model="formLabelAlign"
       style="max-width: 600px"
     >
-      <el-form-item label="Name">
+      <el-form-item label="用户名">
         <el-input v-model="formLabelAlign.name" />
       </el-form-item>
-      <el-form-item label="Activity zone">
+      <el-form-item label="密码">
         <el-input v-model="formLabelAlign.region" />
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="formLabelAlign.type" />
       </el-form-item>
     </el-form>
   </div>
