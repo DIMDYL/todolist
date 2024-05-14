@@ -135,7 +135,7 @@ watch(
       <div class="dialog-form">
         <div class="input-box">
           <div>
-            <i>头像：</i>
+            <i>头像</i>
             <div class="img" style="margin-left: 40px">
               <el-avatar
                 style="position: absolute"
@@ -143,45 +143,56 @@ watch(
                 :src="showedImageUrl"
               ></el-avatar>
               <div class="img-cover" @click="popFileWindow"></div>
-              <input type="file" ref="fileTag" />
+              <input type="file" ref="fileTag" class="BoxColor" />
             </div>
           </div>
           <i v-if="isErrorForFilledInfo.image" style="top: 100px">请添加头像</i>
         </div>
         <div class="input-box">
           <div>
-            <i>昵称：</i>
-            <input placeholder="请输入昵称" v-model="editForm.nickName" />
+            <i>昵称</i>
+            <input
+              placeholder="请输入昵称"
+              class="BoxColor"
+              v-model="editForm.nickName"
+            />
           </div>
           <i v-if="isErrorForFilledInfo.nickName">请填写昵称</i>
         </div>
         <div class="input-box">
           <div>
-            <i>邮箱：</i
-            ><input placeholder="请输入邮箱" v-model="editForm.email" />
-            <el-button type="info" class="gainCheckNumber"
-              >获取验证码</el-button
-            >
+            <i>邮箱</i
+            ><input
+              placeholder="请输入邮箱"
+              class="BoxColor"
+              v-model="editForm.email"
+            />
+            <el-button>发送</el-button>
           </div>
           <i v-if="isErrorForFilledInfo.email">请填写邮箱</i>
         </div>
         <div class="input-box">
           <div>
-            <i>验证码：</i
+            <i>验证码</i
             ><input
               placeholder="请输入验证码"
+              class="BoxColor"
               v-model="editForm.checkingNumber"
             />
           </div>
           <i v-if="isErrorForFilledInfo.checkingNumber">请填写验证码</i>
         </div>
-        <div class="input-box">
+        <!-- <div class="input-box">
           <div>
-            <i>密码：</i
-            ><input placeholder="请输入邮箱" v-model="editForm.password" />
+            <i>密码</i
+            ><input
+              placeholder="请输入邮箱"
+              class="BoxColor"
+              v-model="editForm.password"
+            />
           </div>
           <i v-if="isErrorForFilledInfo.password">请填写密码</i>
-        </div>
+        </div> -->
       </div>
       <template #footer>
         <div class="dialog-footer">
@@ -240,12 +251,14 @@ watch(
 }
 .input-box > div i:nth-child(1) {
   width: 60px;
+  color: rgb(255, 105, 180);
 }
 .input-box input {
   box-sizing: border-box;
   padding: 0 0 0 10px;
-  flex: 0 0 200px;
+  flex: 1 0 0;
   height: 30px;
+  border: 1px solid rgb(220, 223, 230);
 }
 .img {
   position: relative;
@@ -269,8 +282,8 @@ watch(
 input[type='file'] {
   opacity: 0;
 }
-.gainCheckNumber {
-  height: 100%;
-  padding: 0 1px;
+input:focus {
+  caret-color: rgb(255, 105, 180);
+  border-color: rgb(64, 158, 255);
 }
 </style>
