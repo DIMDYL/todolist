@@ -6,10 +6,14 @@ const formLabelAlign = reactive({
   region: '',
   type: ''
 })
+const login = () => {
+  console.log(1)
+}
 const labelPosition = ref('Top')
 </script>
 <template>
   <div class="login">
+    <h1>登录</h1>
     <el-form
       :label-position="labelPosition"
       label-width="auto"
@@ -20,7 +24,10 @@ const labelPosition = ref('Top')
         <el-input v-model="formLabelAlign.name" />
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="formLabelAlign.region" />
+        <el-input type="password" v-model="formLabelAlign.region" />
+      </el-form-item>
+      <el-form-item>
+        <a class="button" @click="login">登录</a>
       </el-form-item>
     </el-form>
   </div>
@@ -28,5 +35,18 @@ const labelPosition = ref('Top')
 <style lang="less" scoped>
 .login {
   width: 100%;
+  text-align: center;
+  h1 {
+    color: #ffd04b;
+    margin-bottom: 10px;
+  }
+  .button {
+    width: 100%;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+  }
 }
 </style>

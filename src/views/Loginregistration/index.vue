@@ -1,6 +1,5 @@
 <script setup>
 import { useUserInfoStore } from '@/stores/userinfo.js'
-import { useLayoutStore } from '@/stores/layout.js'
 
 import loginComponents from './loginComponents.vue'
 import registerComponents from './registerComponents.vue'
@@ -19,10 +18,6 @@ const UpdateComponentsName = (val) => {
     sex: '男'
   })
   console.log(useUserInfo.user)
-}
-const useLayout = useLayoutStore()
-const update = () => {
-  useLayout.updatecount('DDD')
 }
 </script>
 <template>
@@ -83,8 +78,9 @@ const update = () => {
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
+    color: #ff69b4;
     .Loginregistrationbox {
-      width: 500px;
+      width: 400px;
       .top {
         color: #ffd04b;
         display: flex;
@@ -110,6 +106,12 @@ const update = () => {
   }
 }
 /deep/ .el-form-item__label {
-  color: white !important;
+  color: #ff69b4 !important;
+}
+/deep/ .el-input__wrapper {
+  background-color: #252527 !important;
+}
+/deep/ .el-input__inner {
+  color: #ff69b4 !important;
 }
 </style>
