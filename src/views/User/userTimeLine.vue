@@ -49,13 +49,13 @@ const data = ref([
       <el-card>
         <div class="card">
           {{ item.content }}
-          <!-- <div
+          <div
             class="operation animate__animated animate__bounce animate__flipInY"
           >
             <a @click.stop="up(1)">编辑</a>
             <a @click.stop="up(2)">删除</a>
             <a @click.stop="up(3)">查看</a>
-          </div> -->
+          </div>
         </div>
       </el-card>
     </el-timeline-item>

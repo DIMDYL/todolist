@@ -90,7 +90,8 @@
   .nav {
     display: none !important;
   }
-  .userinfo .background {
+  .userinfo .background,
+  .contenttop {
     background-size: 100% 100% !important;
     height: 200px !important;
   }
@@ -127,7 +128,8 @@
   .nav {
     display: none !important;
   }
-  .userinfo .background {
+  .userinfo .background,
+  .contenttop {
     background-size: 100% 100% !important;
     height: 200px !important;
   }

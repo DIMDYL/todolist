@@ -19,7 +19,7 @@
           <h4>1991-08-16</h4>
         </li>
         <li class="info animate__animated animate__jackInTheBox">
-          <p>我们的故事</p>
+          <p>我的总结</p>
           <h4>30 篇</h4>
         </li>
       </ul>
