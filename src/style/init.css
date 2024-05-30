@@ -14,6 +14,14 @@ body,html {
 .BoxColor{
     background-color: #252527;
 }
+.textareaStyle{
+    resize: none;
+    box-sizing: border-box;
+    padding: 20px 0 0 20px;
+    background-color: #19191b;
+    -webkit-text-fill-color: white;
+    caret-color: white;
+}
 .title{
     color: #ffd04b;
     border-left:3px solid #ffd04b;

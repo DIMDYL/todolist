@@ -12,7 +12,9 @@ import ContentPanel from './ContentPanel.vue'
 </template>
 <style lang="less" scoped>
 .article {
+  flex-direction: column;
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
 }
 </style>

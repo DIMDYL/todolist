@@ -1,116 +1,55 @@
-<script setup></script>
 <template>
-  <div class="articlebox BoxColor">
-    <div class="info">
-      <div class="userinfo">
-        <el-avatar
-          :size="50"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-        <div>
-          <p>DIMDYL</p>
-          <p>发布于：2024-05-09</p>
+  <ul v-infinite-scroll="scrollQuery">
+    <li v-for="(v, index) in articles" :key="index">
+      <div class="articlebox BoxColor">
+        <div class="info">
+          <div class="userinfo">
+            <el-avatar
+              :size="50"
+              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            />
+            <div>
+              <p>DIMDYL</p>
+              <p>发布于：{{ v.createTime }}</p>
+            </div>
+          </div>
+          <div class="articleinfo">
+            <a>查看详情</a>
+          </div>
+        </div>
+        <div class="word">
+          <p>
+            {{ v.content }}
+          </p>
         </div>
       </div>
-      <div class="articleinfo">
-        <a>查看详情</a>
-      </div>
-    </div>
-    <div class="word">
-      <p>
-        这是一篇测试文章....这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章.......
-      </p>
-    </div>
-  </div>
-  <div class="articlebox BoxColor">
-    <div class="info">
-      <div class="userinfo">
-        <el-avatar
-          :size="50"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-        <div>
-          <p>DIMDYL</p>
-          <p>发布于：2024-05-09</p>
-        </div>
-      </div>
-      <div class="articleinfo">
-        <a>查看详情</a>
-      </div>
-    </div>
-    <div class="word">
-      <p>
-        这是一篇测试文章....这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章.......
-      </p>
-    </div>
-  </div>
-  <div class="articlebox BoxColor">
-    <div class="info">
-      <div class="userinfo">
-        <el-avatar
-          :size="50"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-        <div>
-          <p>DIMDYL</p>
-          <p>发布于：2024-05-09</p>
-        </div>
-      </div>
-      <div class="articleinfo">
-        <a>查看详情</a>
-      </div>
-    </div>
-    <div class="word">
-      <p>
-        这是一篇测试文章....这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章.......
-      </p>
-    </div>
-  </div>
-  <div class="articlebox BoxColor">
-    <div class="info">
-      <div class="userinfo">
-        <el-avatar
-          :size="50"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-        <div>
-          <p>DIMDYL</p>
-          <p>发布于：2024-05-09</p>
-        </div>
-      </div>
-      <div class="articleinfo">
-        <a>查看详情</a>
-      </div>
-    </div>
-    <div class="word">
-      <p>
-        这是一篇测试文章....这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章.......
-      </p>
-    </div>
-  </div>
-  <div class="articlebox BoxColor">
-    <div class="info">
-      <div class="userinfo">
-        <el-avatar
-          :size="50"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-        <div>
-          <p>DIMDYL</p>
-          <p>发布于：2024-05-09</p>
-        </div>
-      </div>
-      <div class="articleinfo">
-        <a>查看详情</a>
-      </div>
-    </div>
-    <div class="word">
-      <p>
-        这是一篇测试文章....这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章.......
-      </p>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
+<script setup>
+import { reactive } from 'vue'
+import { scrollQueryRequest } from '@/axios/summaryRequest'
+import { useUserStore } from '@/stores/user'
+const {
+  userInfo: { id }
+} = useUserStore()
+const queryNumber = 5
+const articles = reactive([])
+
+const scrollQuery = async () => {
+  //①获取数据
+  let response = await scrollQueryRequest({
+    start: articles.length,
+    number: queryNumber,
+    userId: id
+  })
+  //②更新数据
+  if (response != null) {
+    let l = response.data.length
+    for (let i = 0; i < l; i++) articles.push(response.data[i])
+  }
+}
+</script>
 <style lang="less" scoped>
 .articlebox {
   width: 100%;

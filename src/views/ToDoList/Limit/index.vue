@@ -4,14 +4,12 @@
       <Type>
         <template #limit>
           <div>
-            <i>是否限时?&nbsp; </i>
-            <input
-              type="radio"
-              v-model="ifLimit"
-              @click="ifLimit = !ifLimit"
-              style="margin-right: 20px"
+            <el-time-picker
+              v-model="timeInfo.currentTime"
+              style="width: 150px"
+              value-format="HH:mm:ss"
+              placeholder="限时"
             />
-            <input v-if="ifLimit" type="text" />
           </div>
         </template>
       </Type>
@@ -24,16 +22,35 @@
 import Content from '@/components/Content/index.vue'
 import Type from '@/views/ToDoList/Type.vue'
 import ToDoList from '@/views/ToDoList/ToDoList.vue'
+import { reactive, watch } from 'vue'
+import { useTaskStore } from '@/stores/task.js'
+//------------attributes
+let useTaskStore_ = useTaskStore()
 
-import { ref } from 'vue'
+let timeInfo = reactive({
+  currentTime: ''
+})
+//-----------methods
+let setLimitedTime = useTaskStore_.setLimitedTime
 
-let ifLimit = ref(false)
+//-------------watchs
+watch(
+  () => timeInfo.currentTime,
+  (val) => {
+    setLimitedTime(val)
+  }
+)
+watch(
+  () => useTaskStore_.eventNotice.addTask,
+  () => {
+    timeInfo.currentTime = null
+  }
+)
 </script>
 
 <style scoped>
 .index {
   box-sizing: border-box;
-  padding: 10px;
   display: flex;
   flex-direction: column;
   row-gap: 20px;

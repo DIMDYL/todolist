@@ -1,26 +1,39 @@
-<script setup></script>
+<script setup>
+import { useUserStore } from '@/stores/user'
+import { getTotalNumberRequest } from '@/axios/summaryRequest'
+import { ref } from 'vue'
+
+let { userInfo } = useUserStore()
+let totalSummaryNumber = ref(null)
+
+let init = async () => {
+  //获取总篇数
+  let response = await getTotalNumberRequest(userInfo.id)
+  totalSummaryNumber.value = response != null ? response.data : '0-默认'
+}
+
+init()
+</script>
 <template>
   <div class="userinfo BoxColor">
     <div class="background">
       <div class="avatar animate__animated animate__jackInTheBox">
-        <el-avatar
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
+        <el-avatar :src="userInfo.image" />
       </div>
       <div class="info animate__animated animate__jackInTheBox">
-        <h1>DDD</h1>
-        <h5>DDD@DDD.DDD</h5>
+        <h1>{{ userInfo.userName }}</h1>
+        <h5>{{ userInfo.email }}</h5>
       </div>
     </div>
     <div class="information">
       <ul>
         <li class="info animate__animated animate__jackInTheBox">
           <p>加入时间</p>
-          <h4>1991-08-16</h4>
+          <h4>{{ userInfo.createTime }}</h4>
         </li>
         <li class="info animate__animated animate__jackInTheBox">
           <p>我的总结</p>
-          <h4>30 篇</h4>
+          <h4>{{ totalSummaryNumber }} 篇</h4>
         </li>
       </ul>
     </div>

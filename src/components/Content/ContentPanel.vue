@@ -13,8 +13,9 @@ import ContentRight from './ContentRight.vue'
 </template>
 <style lang="less" scoped>
 .panel {
-  width: 100%;
   display: flex;
+  width: 100%;
+  flex: 1 0 0;
   padding: 17px;
   .article {
     flex: 1;

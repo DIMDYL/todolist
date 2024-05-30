@@ -2,40 +2,33 @@
 import { reactive, ref, watch } from 'vue'
 import userInfo from './userInfo.vue'
 import userPanel from './userPanel.vue'
-import { userStore } from '@/stores/userStore.js'
-import { storeToRefs } from 'pinia'
+import { sendIdentifyingCodeRequest, editRequest } from '@/axios/userRequest.js'
+import { useUserStore } from '@/stores/user'
 
-let userStore_ = userStore()
-let { changeStatusForEdit } = userStore_
-let { isEdit } = storeToRefs(userStore_)
-
-//一、本地属性
-
-//      全局属性
+//-----------------------------------全局属性
+const useUserStore_ = useUserStore() //user的store
 let fileTag = ref() //文件标签
-
-let showedImageUrl = ref('') //展示图片
-
-//      普通属性
-
-let editForm = reactive({
-  //①编辑的用户信息
-  image: '',
-  nickName: '',
-  email: '',
-  password: '',
-  checkingNumber: ''
-})
+let showedImageUrl = ref(useUserStore_.userInfo.image) //展示图片
+let isEdit = ref(false) //用户编辑dialog 开关
+//①用户信息提示
 let isErrorForFilledInfo = reactive({
-  //①用户信息提示
   image: false,
   nickName: false,
   email: false,
-  checkingNumber: false,
+  identifyingCode: false,
   password: false
 })
-// 二、本地方法
+//①编辑的用户信息
+let editForm = reactive({
+  image: useUserStore_.userInfo.image,
+  userName: useUserStore_.userInfo.userName,
+  email: useUserStore_.userInfo.email,
+  identifyingCode: ''
+})
 
+// 二、-----------------------------本地方法
+
+//弹出选择文件窗口
 let popFileWindow = () => {
   //  弹出文件选择框
   fileTag.value.addEventListener('change', () => {
@@ -43,77 +36,91 @@ let popFileWindow = () => {
   })
   fileTag.value.click()
 }
-
-let clearEditForm = () => {
-  Object.assign(editForm, {
-    image: '', //如果 showedImageUrl存在，那么表示存在图片
-    nickName: '',
-    email: '',
-    password: '',
-    checkingNumber: ''
-  })
+//改变编辑的状态
+let changeStatusForEdit = (val) => {
+  isEdit.value = val
 }
-let edit = () => {
+//编辑用户信息
+let edit = async () => {
   if (checkInfoIeagl()) {
-    console.log('修改')
+    // ①封装数据
+    let formData = new FormData()
+    formData.append('id', useUserStore_.userInfo.id)
+    formData.append('userName', editForm.userName)
+    formData.append(
+      'image',
+      editForm.image instanceof File ? editForm.image : null
+    )
+    formData.append('email', editForm.email)
+    formData.append('identifyingCode', editForm.identifyingCode)
+    //②发送请求
+    const data = await editRequest(formData)
+    //③处理响应 & 编辑成功
+    if (data != null) {
+      //更新用户信息
+      useUserStore_.updateUserInfo()
+      //关闭编辑窗口
+      changeStatusForEdit(false)
+    }
   }
 }
+//检测输入编辑的数据合法性
 let checkInfoIeagl = () => {
-  function image() {
-    isErrorForFilledInfo.image = false
-  }
-  function nickName() {
-    isErrorForFilledInfo.nickName = false
-  }
-  function email() {
-    isErrorForFilledInfo.email = false
-  }
-  function checkingNumber() {
-    isErrorForFilledInfo.checkingNumber = false
-  }
-  function password() {
-    isErrorForFilledInfo.password = false
-  }
   let bool = true
 
   if (editForm.image === '') {
     bool = false //验证失败
-    ;(isErrorForFilledInfo.image = true), clearTimeout(image)
-    setTimeout(image, 1000)
+    isErrorForFilledInfo.image = true
+    setTimeout(() => {
+      isErrorForFilledInfo.image = false
+    }, 1000)
   } else {
     isErrorForFilledInfo.image = false
   }
-
-  if (editForm.nickName === '') {
+  if (editForm.userName === '') {
     bool = false //验证失败
-    ;(isErrorForFilledInfo.nickName = true), clearTimeout(nickName)
-    setTimeout(nickName, 1000)
+    isErrorForFilledInfo.nickName = true
+    setTimeout(() => {
+      isErrorForFilledInfo.nickName = false
+    }, 1000)
   } else {
     isErrorForFilledInfo.nickName = false
   }
   if (editForm.email === '') {
     bool = false //验证失败
-    ;(isErrorForFilledInfo.email = true), clearTimeout(email)
-    setTimeout(email, 1000)
+    isErrorForFilledInfo.email = true
+    setTimeout(() => {
+      isErrorForFilledInfo.email = false
+    }, 1000)
   } else {
     isErrorForFilledInfo.email = false
   }
-  if (editForm.checkingNumber === '') {
+  if (editForm.identifyingCode === '') {
     bool = false //验证失败
-    ;(isErrorForFilledInfo.checkingNumber = true), clearTimeout(checkingNumber)
-    setTimeout(checkingNumber, 1000)
+    isErrorForFilledInfo.identifyingCode = true
+    setTimeout(() => {
+      isErrorForFilledInfo.identifyingCode = false
+    }, 1000)
   } else {
-    isErrorForFilledInfo.checkingNumber = false
+    isErrorForFilledInfo.identifyingCode = false
   }
   if (editForm.password === '') {
     bool = false //验证失败
-    ;(isErrorForFilledInfo.password = true), clearTimeout(password)
-    setTimeout(password, 1000)
+    isErrorForFilledInfo.password = true
+    setTimeout(() => {
+      isErrorForFilledInfo.password = false
+    }, 1000)
   } else {
     isErrorForFilledInfo.password = false
   }
 
   return bool
+}
+let sendidentifylingCode = async () => {
+  sendIdentifyingCodeRequest({
+    email: useUserStore_.userInfo.email,
+    type: 2
+  })
 }
 // 三、监听
 watch(
@@ -121,7 +128,8 @@ watch(
   () => editForm.image,
   (newVal) => {
     if (newVal != '' && newVal != null) {
-      showedImageUrl.value = URL.createObjectURL(newVal)
+      showedImageUrl.value =
+        newVal instanceof File ? URL.createObjectURL(newVal) : newVal
     }
   }
 )
@@ -154,7 +162,7 @@ watch(
             <input
               placeholder="请输入昵称"
               class="BoxColor"
-              v-model="editForm.nickName"
+              v-model="editForm.userName"
             />
           </div>
           <i v-if="isErrorForFilledInfo.nickName">请填写昵称</i>
@@ -167,7 +175,7 @@ watch(
               class="BoxColor"
               v-model="editForm.email"
             />
-            <el-button>发送</el-button>
+            <el-button @click="sendidentifylingCode">发送</el-button>
           </div>
           <i v-if="isErrorForFilledInfo.email">请填写邮箱</i>
         </div>
@@ -177,10 +185,10 @@ watch(
             ><input
               placeholder="请输入验证码"
               class="BoxColor"
-              v-model="editForm.checkingNumber"
+              v-model="editForm.identifyingCode"
             />
           </div>
-          <i v-if="isErrorForFilledInfo.checkingNumber">请填写验证码</i>
+          <i v-if="isErrorForFilledInfo.identifyingCode">请填写验证码</i>
         </div>
         <!-- <div class="input-box">
           <div>
@@ -196,13 +204,13 @@ watch(
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="changeStatusForEdit(!isEdit)">取消</el-button>
+          <el-button @click="changeStatusForEdit(false)">取消</el-button>
           <el-button type="primary" @click="edit"> 修改 </el-button>
         </div>
       </template>
     </el-dialog>
     <userInfo></userInfo>
-    <userPanel></userPanel>
+    <userPanel @displayEditDialog="changeStatusForEdit"></userPanel>
   </div>
 </template>
 <style lang="less" scoped>

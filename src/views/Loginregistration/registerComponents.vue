@@ -1,15 +1,96 @@
 <script setup>
-import { ref } from 'vue'
-
-const userinfo = ref({
-  username: '',
-  nikename: '',
+import { reactive } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { sendIdentifyingCodeRequest } from '@/axios/userRequest'
+//-----------------data-------------------------
+const userinfo = reactive({
+  accountName: '',
+  userName: '',
   password: '',
-  emial: '',
-  validate: ''
+  email: '',
+  identifyingCode: ''
 })
-const register = () => {
-  console.log(1)
+const useUserStore_ = useUserStore()
+
+let isErrorForFilledInfo = reactive({
+  //①用户信息提示
+  accountName: false,
+  userName: false,
+  password: false,
+  email: false,
+  identifyingCode: false
+})
+//-------------------methods--------------------
+const sendIdentifyingCode = async () => {
+  sendIdentifyingCodeRequest({
+    email: userinfo.email,
+    type: 1
+  })
+}
+const checkInfoIeagl = () => {
+  //结果
+  let bool = true
+  //如果没有填写，那么添加定时器
+  if (userinfo.accountName === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.accountName = true
+    setTimeout(() => {
+      isErrorForFilledInfo.accountName = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.accountName = false
+  }
+  if (userinfo.image === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.image = true
+    setTimeout(() => {
+      isErrorForFilledInfo.image = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.image = false
+  }
+  if (userinfo.userName === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.userName = true
+    setTimeout(() => {
+      isErrorForFilledInfo.userName = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.userName = false
+  }
+  if (userinfo.email === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.email = true
+    setTimeout(() => {
+      isErrorForFilledInfo.email = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.email = false
+  }
+  if (userinfo.identifyingCode === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.identifyingCode = true
+    setTimeout(() => {
+      isErrorForFilledInfo.identifyingCode = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.identifyingCode = false
+  }
+  if (userinfo.password === '') {
+    bool = false //验证失败
+    isErrorForFilledInfo.password = true
+    setTimeout(() => {
+      isErrorForFilledInfo.password = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.password = false
+  }
+  return bool
+}
+const signup = () => {
+  if (checkInfoIeagl()) {
+    useUserStore_.loginOrSignup(false, userinfo)
+  }
 }
 </script>
 <template>
@@ -21,25 +102,30 @@ const register = () => {
       style="max-width: 600px"
     >
       <el-form-item label="用户名">
-        <el-input v-model="userinfo.name" />
+        <el-input v-model="userinfo.accountName" />
+        <i v-if="isErrorForFilledInfo.accountName">请输入用户名</i>
       </el-form-item>
       <el-form-item label="昵称">
-        <el-input v-model="userinfo.nikename" />
+        <el-input v-model="userinfo.userName" />
+        <i v-if="isErrorForFilledInfo.userName">请输入昵称</i>
       </el-form-item>
       <el-form-item label="密码">
         <el-input type="password" v-model="userinfo.password" />
+        <i v-if="isErrorForFilledInfo.password">请输入密码</i>
       </el-form-item>
-      <div class="emial">
+      <div class="email">
         <el-form-item label="邮箱">
-          <el-input v-model="userinfo.emial" />
+          <el-input v-model="userinfo.email" />
+          <i v-if="isErrorForFilledInfo.email">请输入邮箱</i>
         </el-form-item>
-        <el-button>发送</el-button>
+        <el-button @click="sendIdentifyingCode">发送</el-button>
       </div>
       <el-form-item label="验证码">
-        <el-input v-model="userinfo.validate" />
+        <el-input v-model="userinfo.identifyingCode" />
+        <i v-if="isErrorForFilledInfo.identifyingCode">请输入验证码</i>
       </el-form-item>
       <el-form-item>
-        <a class="button" @click="register">注册</a>
+        <a class="button" @click="signup">注册</a>
       </el-form-item>
     </el-form>
   </div>
@@ -52,7 +138,7 @@ const register = () => {
     color: #ffd04b;
     margin-bottom: 10px;
   }
-  .emial {
+  .email {
     width: 100%;
     display: flex;
     justify-content: space-between;

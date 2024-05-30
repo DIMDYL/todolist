@@ -1,26 +1,28 @@
 <script setup>
 import userTimeLine from './userTimeLine.vue'
-import { userStore } from '@/stores/userStore.js'
-import { storeToRefs } from 'pinia'
-let userStore_ = userStore()
-let { isEdit } = storeToRefs(userStore_)
+import { useUserStore } from '@/stores/user'
+import { defineEmits } from 'vue'
+
+const {
+  userInfo: { userName, email, createTime }
+} = useUserStore()
+let emit = defineEmits(['displayEditDialog'])
+let displayEditDialog = () => {
+  emit('displayEditDialog', true)
+}
 </script>
 <template>
   <div class="panel">
     <div class="info BoxColor">
       <div class="infobox animate__animated animate__jackInTheBox">
-        <h1>DDD</h1>
-        <h5>DDD@DDD.DDD</h5>
+        <h1>{{ userName }}</h1>
+        <h5>{{ email }}</h5>
         <p>加入时间</p>
-        <h4>1991-08-16</h4>
-        <el-button
-          type="info"
-          @click="userStore_.changeStatusForEdit(!isEdit.value)"
-          >编辑</el-button
-        >
+        <h4>{{ createTime }}</h4>
+        <el-button type="info" @click="displayEditDialog">编辑</el-button>
       </div>
     </div>
-    <div class="timeline BoxColor">
+    <div class="timeline">
       <userTimeLine></userTimeLine>
     </div>
   </div>
@@ -51,8 +53,10 @@ let { isEdit } = storeToRefs(userStore_)
     }
   }
   .timeline {
-    flex: 1;
-    padding: 27px;
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
     box-sizing: border-box;
     height: auto;
     transition: all 0.5s;

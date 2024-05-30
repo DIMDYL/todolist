@@ -1,24 +1,19 @@
 <script setup>
-import { useUserInfoStore } from '@/stores/userinfo.js'
-
+import { useUserStore } from '@/stores/user.js'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 import loginComponents from './loginComponents.vue'
 import registerComponents from './registerComponents.vue'
-const useUserInfo = useUserInfoStore()
-if (useUserInfo.componentsname === null) {
-  useUserInfo.updatecomponentsname(loginComponents)
-}
-console.log(useUserInfo.user)
-
-const UpdateComponentsName = (val) => {
-  useUserInfo.updatecomponentsname(val)
-  console.log(useUserInfo.componentsname)
-  useUserInfo.updateinfo({
-    name: 'dimdi111m',
-    age: 18,
-    sex: '男'
-  })
-  console.log(useUserInfo.user)
-}
+// pinia
+const useUserStore_ = useUserStore()
+//组件的状态
+const { componentStatus } = storeToRefs(useUserStore_)
+//切换组件的方法
+const switchComponent_ = useUserStore_.switchComponent
+// 要显示的组件
+const currentComponent = computed(() => {
+  return componentStatus.value.isLogin ? loginComponents : registerComponents
+})
 </script>
 <template>
   <div class="Loginregistration">
@@ -35,28 +30,20 @@ const UpdateComponentsName = (val) => {
           </div>
         </div>
         <KeepAlive>
-          <component :is="useUserInfo.componentsname"></component>
+          <component :is="currentComponent"></component>
         </KeepAlive>
         <div class="bottom">
+          <a class="forgotpassword">忘记密码</a>
           <a
-            class="forgotpassword"
-            @click="UpdateComponentsName(loginComponents)"
-            >忘记密码</a
-          >
-          <a
-            v-if="
-              useUserInfo.componentsname.__hmrId === registerComponents.__hmrId
-            "
+            v-if="!componentStatus.isLogin"
             class="register"
-            @click="UpdateComponentsName(loginComponents)"
+            @click="switchComponent_(true)"
             >去登录</a
           >
           <a
-            v-if="
-              useUserInfo.componentsname.__hmrId === loginComponents.__hmrId
-            "
+            v-if="componentStatus.isLogin"
             class="login"
-            @click="UpdateComponentsName(registerComponents)"
+            @click="switchComponent_(false)"
             >去注册</a
           >
         </div>
@@ -89,6 +76,7 @@ const UpdateComponentsName = (val) => {
         justify-content: center;
         margin-bottom: 20px;
       }
+
       .bottom {
         width: 100%;
         margin-top: 20px;
@@ -113,5 +101,14 @@ const UpdateComponentsName = (val) => {
 }
 /deep/ .el-input__inner {
   color: #ff69b4 !important;
+}
+/deep/ .el-form .el-form-item {
+  position: relative;
+  margin-bottom: 25px !important;
+
+  i {
+    position: absolute;
+    top: 28px;
+  }
 }
 </style>

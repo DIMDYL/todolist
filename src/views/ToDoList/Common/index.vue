@@ -16,7 +16,6 @@ import ToDoList from '@/views/ToDoList/ToDoList.vue'
 <style scoped>
 .index {
   box-sizing: border-box;
-  padding: 10px;
   display: flex;
   flex-direction: column;
   row-gap: 20px;
