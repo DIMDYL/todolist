@@ -1,18 +1,10 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
-import { getTotalNumberRequest } from '@/axios/summaryRequest'
-import { ref } from 'vue'
 
-let { userInfo } = useUserStore()
-let totalSummaryNumber = ref(null)
+let useUserStore_ = useUserStore()
+let { userInfo } = useUserStore_
 
-let init = async () => {
-  //获取总篇数
-  let response = await getTotalNumberRequest(userInfo.id)
-  totalSummaryNumber.value = response != null ? response.data : '0-默认'
-}
-
-init()
+useUserStore_.queryTotalSummaryNumber()
 </script>
 <template>
   <div class="userinfo BoxColor">
@@ -33,7 +25,7 @@ init()
         </li>
         <li class="info animate__animated animate__jackInTheBox">
           <p>我的总结</p>
-          <h4>{{ totalSummaryNumber }} 篇</h4>
+          <h4>{{ userInfo.totalSummaryNumber }} 篇</h4>
         </li>
       </ul>
     </div>

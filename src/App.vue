@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/user'
 
 //初始化
 //①用户数据初始化
-useUserStore().updateUserInfo()
+useUserStore().queryUserInfo()
 </script>
 
 <template>

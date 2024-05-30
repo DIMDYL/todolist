@@ -1,4 +1,25 @@
 <template>
+  <el-dialog v-model="dialogInfo.isDis" style="background-color: #272727">
+    <div
+      style="
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+      "
+    >
+      <p style="height: 400px; overflow-y: auto; color: white">
+        {{ dialogInfo.content }}
+      </p>
+      <button
+        style="margin-left: auto; padding: 5px 10px"
+        @click="dialogInfo.isDis = false"
+      >
+        关闭
+      </button>
+    </div>
+  </el-dialog>
+  <div v-if="articles.length == 0">这里没有任何总结！！！</div>
   <ul v-infinite-scroll="scrollQuery">
     <li v-for="(v, index) in articles" :key="index">
       <div class="articlebox BoxColor">
@@ -14,11 +35,11 @@
             </div>
           </div>
           <div class="articleinfo">
-            <a>查看详情</a>
+            <a @click="show(v.content)">查看详情</a>
           </div>
         </div>
         <div class="word">
-          <p>
+          <p style="width: 0px; height: 30px">
             {{ v.content }}
           </p>
         </div>
@@ -35,7 +56,16 @@ const {
 } = useUserStore()
 const queryNumber = 5
 const articles = reactive([])
-
+const dialogInfo = reactive({
+  isDis: false,
+  content: ''
+})
+//展示详情
+const show = (content) => {
+  dialogInfo.isDis = true
+  dialogInfo.content = content
+}
+//滚动查询
 const scrollQuery = async () => {
   //①获取数据
   let response = await scrollQueryRequest({
@@ -57,6 +87,7 @@ const scrollQuery = async () => {
   margin-bottom: 17px;
   box-sizing: border-box;
   .word {
+    overflow: hidden;
     width: 100%;
     padding: 20px 0;
     text-indent: 2em;

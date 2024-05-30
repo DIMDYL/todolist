@@ -8,10 +8,10 @@ import {
 } from '@/axios/summaryRequest'
 import { useUserStore } from '@/stores/user'
 //-----------------------------attribute
-
+const useUserStore_ = useUserStore()
 const {
   userInfo: { id }
-} = useUserStore()
+} = useUserStore_
 const summaries = reactive([])
 const queryNumber = 5
 let typeContent = ref('')
@@ -41,16 +41,22 @@ const addSummary = async () => {
   })
   //热更新本地数据
   if (response != null) {
-    summaries.unshift(response.data)
+    summaries.unshift(response.data) //数据
+    useUserStore_.updateTotalSummaryNumber(1) //篇数
+    typeContent.value = '' //清空数据
   }
-  //清空数据
-  typeContent.value = ''
 }
-const removeSummary = (id, index) => {
+const removeSummary = async (id, index) => {
   //删除remote
-  deleteRequest(id)
-  //清理local
-  summaries.splice(index, 1)
+  let response = await deleteRequest(id)
+  //修改成功
+  if (response != null) {
+    summaries.splice(index, 1) //清理local
+    if (summaries.length < queryNumber) {
+      scrollQuery()
+    }
+    useUserStore_.updateTotalSummaryNumber(-1) //篇数
+  }
 }
 const disDialog = (isEdit, summary) => {
   dialogInfo.disDialog = true
@@ -71,6 +77,7 @@ const saveEditedContent = async () => {
     dialogInfo.disDialog = false
   }
 }
+scrollQuery()
 </script>
 <template>
   <div class="user-timeline-box">
@@ -108,7 +115,8 @@ const saveEditedContent = async () => {
       <button @click="addSummary">提交</button>
     </div>
     <div class="BoxColor">
-      <el-timeline v-infinite-scroll="scrollQuery">
+      <div v-if="summaries.length <= 0">这里没有任何总结!!!</div>
+      <el-timeline v-else v-infinite-scroll="scrollQuery">
         <el-timeline-item
           v-for="(item, index) in summaries"
           :key="item.id"
@@ -117,7 +125,7 @@ const saveEditedContent = async () => {
         >
           <el-card>
             <div class="card">
-              <p style="height: 40px; overflow: hidden">
+              <p style="height: 40px; width: 0px; white-space: nowrap">
                 {{ item.content }}
               </p>
               <div

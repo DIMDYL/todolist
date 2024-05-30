@@ -10,6 +10,9 @@ const useUserStore_ = useUserStore() //user的store
 let fileTag = ref() //文件标签
 let showedImageUrl = ref(useUserStore_.userInfo.image) //展示图片
 let isEdit = ref(false) //用户编辑dialog 开关
+let sendButton = ref()
+let countDown = ref()
+let isDisabled = ref(false)
 //①用户信息提示
 let isErrorForFilledInfo = reactive({
   image: false,
@@ -25,7 +28,6 @@ let editForm = reactive({
   email: useUserStore_.userInfo.email,
   identifyingCode: ''
 })
-
 // 二、-----------------------------本地方法
 
 //弹出选择文件窗口
@@ -117,10 +119,28 @@ let checkInfoIeagl = () => {
   return bool
 }
 let sendidentifylingCode = async () => {
+  //按钮禁止点击状态，并显式动画效果
+  startCountDown(6)
+  //发送验证码
   sendIdentifyingCodeRequest({
-    email: useUserStore_.userInfo.email,
+    email: editForm.email,
     type: 2
   })
+}
+let startCountDown = (second) => {
+  isDisabled.value = true
+  countDown.value = second
+  sendButton.value.disabled = true
+  //动画效果
+  let countDownInterval = setInterval(() => {
+    countDown.value--
+  }, 1000)
+  //结束动作
+  setTimeout(() => {
+    sendButton.value.disabled = false
+    isDisabled.value = false
+    clearInterval(countDownInterval)
+  }, second * 1000)
 }
 // 三、监听
 watch(
@@ -175,7 +195,13 @@ watch(
               class="BoxColor"
               v-model="editForm.email"
             />
-            <el-button @click="sendidentifylingCode">发送</el-button>
+            <button
+              @click="sendidentifylingCode"
+              ref="sendButton"
+              style="width: 50px; text-align: center"
+            >
+              {{ isDisabled ? countDown : '发送' }}
+            </button>
           </div>
           <i v-if="isErrorForFilledInfo.email">请填写邮箱</i>
         </div>
@@ -190,17 +216,6 @@ watch(
           </div>
           <i v-if="isErrorForFilledInfo.identifyingCode">请填写验证码</i>
         </div>
-        <!-- <div class="input-box">
-          <div>
-            <i>密码</i
-            ><input
-              placeholder="请输入邮箱"
-              class="BoxColor"
-              v-model="editForm.password"
-            />
-          </div>
-          <i v-if="isErrorForFilledInfo.password">请填写密码</i>
-        </div> -->
       </div>
       <template #footer>
         <div class="dialog-footer">
