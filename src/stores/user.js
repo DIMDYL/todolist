@@ -20,6 +20,7 @@ export const useUserStore = defineStore('userStore', {
       email: null,
       userName: null,
       createTime: null,
+      image: null,
       totalSummaryNumber: null
     }
   }),
@@ -36,11 +37,13 @@ export const useUserStore = defineStore('userStore', {
         data = await signupRequest(params)
       }
       if (data != null) {
+        //获取返回数据
         Object.assign(this.userInfo, data.data)
+        //跳转到workbench页面
         router.push('/')
+        //用户登录/注册完毕，更新一次
+        this.queryUserInfo()
       }
-      //用户登录/注册完毕，更新一次
-      this.queryUserInfo()
     },
     //更新用户数据
     async queryUserInfo() {

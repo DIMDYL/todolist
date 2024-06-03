@@ -24,6 +24,7 @@
 <script setup>
 import { useTaskStore } from '@/stores/task.js'
 import { useUserStore } from '@/stores/user.js'
+import { ElMessage } from 'element-plus'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -37,9 +38,14 @@ let { setContent, initialize, addTask } = useTaskStore()
 let addTask_ = () => {
   //执行添加
   let id = useUserStore().userInfo.id
-  addTask(id)
-  //清空数据
-  local_content.value = ''
+  //判断大小是否符合规范
+  if (local_content.value.length <= 70) {
+    addTask(id)
+    //清空数据
+    local_content.value = ''
+  } else {
+    ElMessage.error('长度超出70')
+  }
 }
 //----------------------------watch
 //当本地的content改变时，就改变全局的

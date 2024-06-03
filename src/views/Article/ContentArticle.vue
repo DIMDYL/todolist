@@ -25,12 +25,9 @@
       <div class="articlebox BoxColor">
         <div class="info">
           <div class="userinfo">
-            <el-avatar
-              :size="50"
-              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-            />
+            <el-avatar :size="50" :src="userInfo.image" />
             <div>
-              <p>DIMDYL</p>
+              <p>{{ userInfo.userName }}</p>
               <p>发布于：{{ v.createTime }}</p>
             </div>
           </div>
@@ -39,7 +36,14 @@
           </div>
         </div>
         <div class="word">
-          <p style="width: 0px; height: 30px">
+          <p
+            style="
+              width: 0px;
+              height: 30px;
+              overflow: visible;
+              white-space: nowrap;
+            "
+          >
             {{ v.content }}
           </p>
         </div>
@@ -51,9 +55,7 @@
 import { reactive } from 'vue'
 import { scrollQueryRequest } from '@/axios/summaryRequest'
 import { useUserStore } from '@/stores/user'
-const {
-  userInfo: { id }
-} = useUserStore()
+const { userInfo } = useUserStore()
 const queryNumber = 5
 const articles = reactive([])
 const dialogInfo = reactive({
@@ -71,7 +73,7 @@ const scrollQuery = async () => {
   let response = await scrollQueryRequest({
     start: articles.length,
     number: queryNumber,
-    userId: id
+    userId: userInfo.id
   })
   //②更新数据
   if (response != null) {

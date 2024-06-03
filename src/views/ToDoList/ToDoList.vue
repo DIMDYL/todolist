@@ -12,6 +12,23 @@
     ②并且如果删除该任务后，当前 {任务条数少于5}，那么就 {查询} 一次，
  -->
 <template>
+  <el-dialog v-model="dialogInfo.isShow" style="background-color: #101011">
+    <div
+      style="width: 100%; display: flex; flex-direction: column; row-gap: 10px"
+    >
+      <div style="width: 100%">
+        <textarea
+          style="width: 100%"
+          class="textareaStyle"
+          v-model="dialogInfo.content"
+        ></textarea>
+      </div>
+      <div class="dialog-footer">
+        <button @click="editTaskContent">保存</button>
+        <button @click="dialogInfo.isShow = false">取消</button>
+      </div>
+    </div>
+  </el-dialog>
   <div class="index">
     <div class="unfinished">
       <div
@@ -32,11 +49,30 @@
             circle
             @click="modifyStatus(index, toDoListInfo.unfinished.data, true)"
           />
-          <div style="align-self: center">
-            <h3>{{ v.content }}</h3>
-            <div style="color: rgb(120, 179, 30)">
+          <div
+            style="
+              display: flex;
+              flex: 1 0 0;
+              flex-direction: column;
+              justify-content: center;
+            "
+          >
+            <p>
+              {{ v.content }}
+            </p>
+            <div
+              v-if="isLimitedTime"
+              v-show="isLimitedTime"
+              style="color: rgb(120, 179, 30)"
+            >
               <i style="font-style: normal">{{ v.limitedTime }}</i>
             </div>
+          </div>
+          <div class="mani-button">
+            <button @click="deleteTask(toDoListInfo.unfinished.data, index)">
+              删除</button
+            >|
+            <button @click="showEditDialog(v)">编辑</button>
           </div>
         </li>
       </ul>
@@ -44,7 +80,7 @@
     <div
       class="finished"
       ref="scrollBox"
-      style="overflow-y: auto; height: 390px"
+      style="overflow-y: auto; height: 350px"
     >
       <div
         v-if="toDoListInfo.finished.data.length == 0"
@@ -53,13 +89,7 @@
       >
         ! ! !这里还没有完成任何任务
       </div>
-      <ul
-        v-else
-        class="toDoList-list-ul BoxColor"
-        v-infinite-scroll="queryFinished"
-        :infinite-scroll-immediate="false"
-        :infinite-scroll-distance="5"
-      >
+      <ul v-else class="toDoList-list-ul BoxColor">
         <li
           class="toDoList-list-li"
           v-for="(v, index) in toDoListInfo.finished.data"
@@ -70,11 +100,29 @@
             circle
             @click="modifyStatus(index, toDoListInfo.finished.data, false)"
           />
-          <div style="align-self: center">
-            <h3>{{ v.content }}</h3>
-            <div style="color: rgb(120, 179, 30)">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+            "
+          >
+            <p>
+              {{ v.content }}
+            </p>
+            <div
+              v-if="isLimitedTime"
+              v-show="isLimitedTime"
+              style="color: rgb(120, 179, 30)"
+            >
               <i style="font-style: normal">{{ v.limitedTime }}</i>
             </div>
+          </div>
+          <div class="mani-button">
+            <button @click="deleteTask(toDoListInfo.finished.data, index)">
+              删除</button
+            >|
+            <button @click="showEditDialog(v)">编辑</button>
           </div>
         </li>
       </ul>
@@ -87,7 +135,12 @@ import { reactive, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useTaskStore } from '@/stores/task'
 import { useRoute } from 'vue-router'
-import { queryRequest, modiyStatusRequest } from '@/axios/taskRequest.js'
+import {
+  queryRequest,
+  modiyStatusRequest,
+  editTaskContentRequest,
+  deleteTaskRequest
+} from '@/axios/taskRequest.js'
 //----------------------------------------attributes
 const useTaskStore_ = useTaskStore()
 //notation
@@ -109,15 +162,21 @@ let toDoListInfo = reactive({
     data: []
   }
 })
+//dialog
+let dialogInfo = ref({
+  isShow: false,
+  task: null,
+  content: ''
+})
 //-----------------------------------------methods
 //查询
-let queryFinished = () => {
+const queryFinished = () => {
   query(true)
 }
-let queryUnFinished = () => {
+const queryUnFinished = () => {
   query(false)
 }
-let query = async (isFinished) => {
+const query = async (isFinished) => {
   //①初始化数据
   let start = isFinished ? toDoListInfo.finished.data.length : null
   let status = isFinished ? 1 : 0
@@ -144,7 +203,7 @@ let query = async (isFinished) => {
   scrollBox.value.scroll(0, scrollBox.value.scrollTop - 10)
 }
 //将时间字符串 转 数字字符串
-let getWhole = (val) => {
+const getWhole = (val) => {
   let value = val.split(':')
   let x = ''
   let l = value.length
@@ -152,7 +211,7 @@ let getWhole = (val) => {
   return x
 }
 //将val插入到array中
-let queryPosition = (array, val, isLimitedTime) => {
+const queryPosition = (array, val, isLimitedTime) => {
   //将时间转成数字
   let value = getWhole(
     isLimitedTime ? val.limitedTime : val.createTime.split(' ')[1]
@@ -177,7 +236,7 @@ let queryPosition = (array, val, isLimitedTime) => {
   return l
 }
 //更改任务状态
-let modifyStatus = async (index, array, isToFinish) => {
+const modifyStatus = async (index, array, isToFinish) => {
   //发送请求
   let response = await modiyStatusRequest(array[index].id, isToFinish ? 1 : 0)
   //本地更新代办数据
@@ -213,6 +272,34 @@ let modifyStatus = async (index, array, isToFinish) => {
     }
   }
 }
+//显示编辑的窗口
+const showEditDialog = (task) => {
+  //激活窗口
+  dialogInfo.value.isShow = true
+  //初始化内容
+  dialogInfo.value.task = task
+  dialogInfo.value.content = task.content
+}
+//删除task
+const deleteTask = async (array, index) => {
+  let response = await deleteTaskRequest(array[index].id)
+  if (response != null) {
+    //删除
+    array.splice(index, 1)
+  }
+}
+//编辑task内容
+const editTaskContent = async () => {
+  let response = await editTaskContentRequest({
+    id: dialogInfo.value.task.id,
+    content: dialogInfo.value.content
+  })
+  //热更新本地
+  if (response != null) {
+    dialogInfo.value.task.content = dialogInfo.value.content
+    dialogInfo.value.isShow = false
+  }
+}
 //-------------------------------watchs
 watch(
   //当提交后，更新数据
@@ -230,6 +317,15 @@ queryFinished()
 </script>
 
 <style scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: end;
+  column-gap: 10px;
+}
+.dialog-footer button {
+  padding: 5px 10px;
+}
+
 .index {
   flex: 1 0 0;
   display: flex;
@@ -238,22 +334,45 @@ queryFinished()
 }
 .toDoList-list-ul {
   box-sizing: border-box;
-  padding: 10px 0 10px 10px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
+  padding: 10px 10px 10px 10px;
 }
 .toDoList-list-li {
   box-sizing: border-box;
-  padding: 15px 0 5px 0;
   display: flex;
-  width: 100%;
   height: 67px;
+  flex: 1 0 0;
   column-gap: 10px;
   border-top: 1px solid #101011;
 }
+.toDoList-list-li p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.mani-button {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.mani-button button {
+  height: 40px;
+  padding: 0 10px;
+  background-color: transparent;
+  outline: none;
+  border: 0px;
+}
+.mani-button button:nth-child(1):hover {
+  color: red;
+}
+.mani-button button:nth-child(2):hover {
+  color: aqua;
+}
 .toDoList-list-li:nth-child(1) {
   border-top: 0px;
+}
+/deep/ .el-button {
+  align-self: center;
 }
 </style>

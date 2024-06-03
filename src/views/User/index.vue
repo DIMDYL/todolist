@@ -33,9 +33,11 @@ let editForm = reactive({
 //弹出选择文件窗口
 let popFileWindow = () => {
   //  弹出文件选择框
-  fileTag.value.addEventListener('change', () => {
+  //在fileTag改变后，才会执行?
+
+  fileTag.value.onchange = () => {
     editForm.image = fileTag.value.files[0]
-  })
+  }
   fileTag.value.click()
 }
 //改变编辑的状态
@@ -60,11 +62,20 @@ let edit = async () => {
     //③处理响应 & 编辑成功
     if (data != null) {
       //更新用户信息
-      useUserStore_.updateUserInfo()
+      useUserStore_.queryUserInfo()
       //关闭编辑窗口
       changeStatusForEdit(false)
     }
   }
+}
+//初始化edit的信息
+let clearEditForm = () => {
+  Object.assign(editForm, {
+    image: useUserStore_.userInfo.image,
+    userName: useUserStore_.userInfo.userName,
+    email: useUserStore_.userInfo.email,
+    identifyingCode: ''
+  })
 }
 //检测输入编辑的数据合法性
 let checkInfoIeagl = () => {
@@ -171,7 +182,13 @@ watch(
                 :src="showedImageUrl"
               ></el-avatar>
               <div class="img-cover" @click="popFileWindow"></div>
-              <input type="file" ref="fileTag" class="BoxColor" />
+              <input
+                v-if="isEdit"
+                id="fileTag"
+                type="file"
+                ref="fileTag"
+                class="BoxColor"
+              />
             </div>
           </div>
           <i v-if="isErrorForFilledInfo.image" style="top: 100px">请添加头像</i>
