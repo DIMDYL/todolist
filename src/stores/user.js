@@ -9,10 +9,8 @@ import { getTotalNumberRequest } from '@/axios/summaryRequest'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
-    componentStatus: {
-      isLogin: true
-    },
-
+    // 0:login 1:register 2:restorePassword
+    componentStatus: 0,
     userInfo: {
       id: null,
       token: null,
@@ -26,7 +24,7 @@ export const useUserStore = defineStore('userStore', {
   }),
   actions: {
     switchComponent(target) {
-      this.componentStatus.isLogin = target
+      this.componentStatus = target
     },
     //true: login false:signup
     async loginOrSignup(type, params) {
@@ -47,6 +45,8 @@ export const useUserStore = defineStore('userStore', {
     },
     //更新用户数据
     async queryUserInfo() {
+      if(this.userInfo.id == null) return 
+      ;
       let response = await queryUserRequest(this.userInfo.id)
       if (response != null) {
         Object.assign(this.userInfo, response.data)

@@ -130,13 +130,23 @@ let checkInfoIeagl = () => {
   return bool
 }
 let sendidentifylingCode = async () => {
-  //按钮禁止点击状态，并显式动画效果
-  startCountDown(6)
-  //发送验证码
-  sendIdentifyingCodeRequest({
-    email: editForm.email,
-    type: 2
-  })
+  //校验是否填写了邮箱
+  if (editForm.email === '') {
+    isErrorForFilledInfo.email = true
+    setTimeout(() => {
+      isErrorForFilledInfo.email = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.email = false
+    //按钮禁止点击状态，并显式动画效果
+    startCountDown(6)
+    //发送验证码
+    sendIdentifyingCodeRequest({
+      email: editForm.email,
+      type: 2
+    })
+  }
+
 }
 let startCountDown = (second) => {
   isDisabled.value = true
@@ -215,9 +225,9 @@ watch(
             <button
               @click="sendidentifylingCode"
               ref="sendButton"
-              style="width: 50px; text-align: center"
+              style="width: 80px; text-align: center"
             >
-              {{ isDisabled ? countDown : '发送' }}
+              {{ isDisabled ? countDown +"秒后重试": '发送' }}
             </button>
           </div>
           <i v-if="isErrorForFilledInfo.email">请填写邮箱</i>

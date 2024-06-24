@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive,ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { sendIdentifyingCodeRequest } from '@/axios/userRequest'
 //-----------------data-------------------------
@@ -11,7 +11,6 @@ const userinfo = reactive({
   identifyingCode: ''
 })
 const useUserStore_ = useUserStore()
-
 let isErrorForFilledInfo = reactive({
   //①用户信息提示
   accountName: false,
@@ -20,12 +19,28 @@ let isErrorForFilledInfo = reactive({
   email: false,
   identifyingCode: false
 })
+let sendButton = ref()
+let countDown = ref()
+let isDisabled = ref(false)
 //-------------------methods--------------------
 const sendIdentifyingCode = async () => {
-  sendIdentifyingCodeRequest({
-    email: userinfo.email,
-    type: 1
-  })
+  //校验是否有填写验证码
+  if (userinfo.email === '') {
+    isErrorForFilledInfo.email = true
+    setTimeout(() => {
+      isErrorForFilledInfo.email = false
+    }, 1000)
+  } else {
+    isErrorForFilledInfo.email = false
+    //按钮禁止点击状态，并显式动画效果
+    startCountDown(6)
+    //发送验证码
+    sendIdentifyingCodeRequest({
+      email: userinfo.email,
+      type: 1
+    })
+  }
+
 }
 const checkInfoIeagl = () => {
   //结果
@@ -92,6 +107,21 @@ const signup = () => {
     useUserStore_.loginOrSignup(false, userinfo)
   }
 }
+let startCountDown = (second) => {
+  isDisabled.value = true
+  countDown.value = second
+  sendButton.value.disabled = true
+  //动画效果
+  let countDownInterval = setInterval(() => {
+    countDown.value--
+  }, 1000)
+  //结束动作
+  setTimeout(() => {
+    sendButton.value.disabled = false
+    isDisabled.value = false
+    clearInterval(countDownInterval)
+  }, second * 1000)
+}
 </script>
 <template>
   <div class="register">
@@ -118,7 +148,7 @@ const signup = () => {
           <el-input v-model="userinfo.email" />
           <i v-if="isErrorForFilledInfo.email">请输入邮箱</i>
         </el-form-item>
-        <el-button @click="sendIdentifyingCode">发送</el-button>
+        <el-button @click="sendIdentifyingCode"  ref="sendButton"> {{ isDisabled ? countDown +"秒后重试": '发送' }}</el-button>
       </div>
       <el-form-item label="验证码">
         <el-input v-model="userinfo.identifyingCode" />

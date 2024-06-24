@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import loginComponents from './loginComponents.vue'
 import registerComponents from './registerComponents.vue'
+import restorePasswordComponent from './restorePasswordComponent.vue'
 // pinia
 const useUserStore_ = useUserStore()
 //组件的状态
@@ -12,7 +13,9 @@ const { componentStatus } = storeToRefs(useUserStore_)
 const switchComponent_ = useUserStore_.switchComponent
 // 要显示的组件
 const currentComponent = computed(() => {
-  return componentStatus.value.isLogin ? loginComponents : registerComponents
+  return componentStatus.value == 0? loginComponents :
+         componentStatus.value == 1? registerComponents : 
+                                     restorePasswordComponent
 })
 </script>
 <template>
@@ -29,21 +32,24 @@ const currentComponent = computed(() => {
             <h1 data-v-58ecf930="">List</h1>
           </div>
         </div>
-        <KeepAlive>
           <component :is="currentComponent"></component>
-        </KeepAlive>
         <div class="bottom">
-          <a class="forgotpassword">忘记密码</a>
           <a
-            v-if="!componentStatus.isLogin"
-            class="register"
-            @click="switchComponent_(true)"
-            >去登录</a
+          v-if="componentStatus == 0"  
+          class="forgotpassword" 
+          @click="switchComponent_(2)">
+          忘记密码</a
           >
           <a
-            v-if="componentStatus.isLogin"
+            v-if="componentStatus != 0"
+            class="register"
+            @click="switchComponent_(0)"
+            >去登录</a
+          >      
+          <a
+            v-if="componentStatus == 0"
             class="login"
-            @click="switchComponent_(false)"
+            @click="switchComponent_(1)"
             >去注册</a
           >
         </div>

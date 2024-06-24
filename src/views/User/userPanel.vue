@@ -3,9 +3,7 @@ import userTimeLine from './userTimeLine.vue'
 import { useUserStore } from '@/stores/user'
 import { defineEmits } from 'vue'
 
-const {
-  userInfo: { userName, email, createTime }
-} = useUserStore()
+const {userInfo} = useUserStore()
 let emit = defineEmits(['displayEditDialog'])
 let displayEditDialog = () => {
   emit('displayEditDialog', true)
@@ -15,10 +13,10 @@ let displayEditDialog = () => {
   <div class="panel">
     <div class="info BoxColor">
       <div class="infobox animate__animated animate__jackInTheBox">
-        <h1>{{ userName }}</h1>
-        <h5>{{ email }}</h5>
+        <h1>{{ userInfo.userName }}</h1>
+        <h5>{{  userInfo.email }}</h5>
         <p>加入时间</p>
-        <h4>{{ createTime }}</h4>
+        <h4>{{  userInfo.createTime }}</h4>
         <el-button type="info" @click="displayEditDialog">编辑</el-button>
       </div>
     </div>

@@ -1,6 +1,17 @@
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia';
 const defaultactive = ref(location.pathname)
+
+const {userInfo} =storeToRefs(useUserStore());
+
+const logout  = ()=>{
+//  ①删除token
+localStorage.removeItem("userStore");
+//  ②重刷新页面
+location.reload();
+}
 </script>
 
 <template>
@@ -46,7 +57,11 @@ const defaultactive = ref(location.pathname)
           <el-icon color="#409efc" class="iconfont">&#xe6c2; </el-icon>
           GitHub地址
         </el-menu-item>
-      </a>
+      </a>   
+      <!-- 当用户登录后才显示 -->
+      <el-menu-item v-if="userInfo.token != null && userInfo.id != null">
+        <a href="#" @click="logout">退出登录</a>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

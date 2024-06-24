@@ -89,7 +89,8 @@
       >
         ! ! !这里还没有完成任何任务
       </div>
-      <ul v-else class="toDoList-list-ul BoxColor">
+      <ul v-else class="toDoList-list-ul BoxColor"
+      v-infinite-scroll="queryFinished">
         <li
           class="toDoList-list-li"
           v-for="(v, index) in toDoListInfo.finished.data"
@@ -141,6 +142,7 @@ import {
   editTaskContentRequest,
   deleteTaskRequest
 } from '@/axios/taskRequest.js'
+import { ElMessage } from 'element-plus'
 //----------------------------------------attributes
 const useTaskStore_ = useTaskStore()
 //notation
@@ -290,6 +292,11 @@ const deleteTask = async (array, index) => {
 }
 //编辑task内容
 const editTaskContent = async () => {
+  // 校验长度
+  if(dialogInfo.value.content.length > 70){
+    ElMessage.error("长度超出70")
+    return ;
+  }
   let response = await editTaskContentRequest({
     id: dialogInfo.value.task.id,
     content: dialogInfo.value.content
